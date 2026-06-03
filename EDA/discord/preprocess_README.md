@@ -1,127 +1,11 @@
-# SKN31-2nd-2Team
+# 탐색적 데이터 분석보고서와 데이터 전처리 결과보고서(EDA & Preprocessing Report)
 
-## 팀원 및 역할
+**프로젝트**: 통신사(Telco) 고객 이탈(churn) 예측 모델링 구축
 
-
-**프로젝트 명:** 고객 이탈(Churn) 예측 모델 구축을 위한 데이터 탐색
-
-**분석 데이터:** synthetic_customer_churn_100k.csv  
+**데이터셋**: synthetic_customer_churn_100k.csv<br>
 (출처 : https://www.kaggle.com/datasets/dhrubangtalukdar/telco-customer-churn-data)
 
-본 프로젝트는 Telco 유저들의 이용 행태 및 결제 데이터를 분석하여, 향후 서비스 탈퇴(이탈) 가능성이 높은 사용자를 예측하는 머신러닝 모델 개발 프로젝트입니다. 데이터 전처리, 탐색적 데이터 분석(EDA), 그리고 예측 모델링 과정을 포함하고 있습니다.
-
----
-## 저장소 구조 (Repository Structure)
-
-```
-SKN31-2nd-2Team
-├─ app
-│  └─ app.py                                    # streamlit 화면 구현
-├─ data
-│  ├─ eda_plots
-│  │  ├─ 01_churn_distribution.png
-│  │  ├─ 02_numerical_distributions.png
-│  │  ├─ 03_categorical_churn_analysis.png
-│  │  └─ 04_correlation_matrix.png
-│  └─ synthetic_customer_churn_100k.csv
-├─ models
-│  ├─ 01_RandomForest                           # RandomForest 모델링 데이터
-│  │  ├─ data
-│  │  │  └─ synthetic_customer_churn_100k.csv   # 원본 데이터셋 (Raw Data)
-│  │  ├─ data_scaling.py
-│  │  ├─ eval.py
-│  │  ├─ guide.md
-│  │  ├─ modeling.py
-│  │  └─ saved_models
-│  │     ├─ randomforest_model.pkl
-│  │     ├─ x_test.pkl
-│  │     ├─ x_train.pkl
-│  │     ├─ x_val.pkl
-│  │     ├─ y_test.pkl
-│  │     ├─ y_train.pkl
-│  │     └─ y_val.pkl
-│  ├─ 02_GradientBoosting                       # GradientBoosting 모델링 데이터
-│  │  ├─ gb_feature_importance.png              # GradientBoosting 특성 중요도 이미지
-│  │  ├─ gb_tuning_top10_results.csv            # GradientBoosting 하이퍼파라미터 튜닝 상위 10개 결과 csv
-│  │  ├─ GradientBoosting_main.py      
-│  │  ├─ GradientBoosting_01_preprocessing.py   #  GradientBoosting 전처리 모듈
-│  │  └─ GradientBoosting_02_training.py     #  GradientBoosting 학습, 검증, 평가 모듈
-│  ├─ 03_XGBoost                                # XGBoost 모델링 데이터
-│  │  ├─ app.py
-│  │  ├─ data_scaling.py
-│  │  ├─ guide.md
-│  │  ├─ model_comparison_results.csv
-│  │  ├─ synthetic_customer_churn_100k.csv
-│  │  ├─ XGBoost_main.py
-│  │  ├─ XGBoost_pipeline_01_preprocessing.py
-│  │  ├─ XGBoost_pipeline_02_training.py
-│  │  ├─ XGBoost_pipeline_03_tuning.py
-│  │  ├─ xgb_feature_importance.png
-│  │  └─ xgb_tuning_top10_results.csv
-│  ├─ 04_LightGBM                               # LightGBM 모델링 데이터
-│  │  ├─ guide.md
-│  │  ├─ LightGBM_01_preprocessing.py
-│  │  ├─ LightGBM_02_training.py
-│  │  ├─ LightGBM_03_tuning.py
-│  │  ├─ LightGBM_main.py
-│  │  └─ saved_data
-│  │     ├─ lgb_feature_importance.png
-│  │     └─ lgb_tuning_top10_results.csv
-│  └─ 05_DeepLearning                           # DeepLearning 모델링 데이터
-│     ├─ data
-│     │  └─ synthetic_customer_churn_100k.csv
-│     ├─ data_scaling.py
-│     ├─ deep_learning_model.py
-│     ├─ final_test.py
-│     ├─ guide.md
-│     ├─ saved_model
-│     │  └─ deep_model.pt
-│     ├─ train.py
-│     └─ training.py
-├─ outputs
-│  ├─ 1_preprocessing_report.md                 # 전처리 결과서
-│  └─ 2_model_training_report.md                # 학습결과서
-├─ README.md                                    # 프로젝트 소개 및 데이터 명세서
-└─ requirements.txt
-
-```
----
-## Tech Stack
-
----
-## 1. 프로젝트 배경
-
-오늘날 이동통신 시장은 신규 고객 유치 비용(CAC, Customer Acquisition Cost)이 기존 고객을 유지하는 비용보다 수 배 이상 높게 발생하는 '성숙기·포화 시장'의 특성을 띄고 있습니다. 무제한 요금제 경쟁, 결합 상품 다변화, 그리고 다양한 알뜰폰(MVNO) 사업자의 등장은 고객이 언제든 더 나은 조건의 경쟁사로 번호이동을 할 수 있는 환경을 제공합니다. 
-
-특히 본 프로젝트에서 활용한 대규모 고객 데이터 분석 결과, **전체 고객의 약 33.1%에 달하는 인원이 이탈(Churn)하는 심각한 시그널이 관측**되었습니다. 이는 기업의 장기적인 매출 안정성을 크게 위협하는 수치입니다. 따라서 사후에 이탈한 고객을 붙잡는 소모적인 마케팅에서 벗어나, 데이터에 기반해 **'이탈 징후가 보이기 직전의 고객'을 선제적으로 감지하고 방어할 수 있는 데이터 기반의 정밀한 이탈 예측 시스템**이 요구되는 시점입니다.
-
----
-
-## 2. 프로젝트 필요성
-
-* **이상치 정제 및 데이터 신뢰성 확보**
-  * 초기 데이터 탐색(EDA) 결과, 고객의 총 청구 금액(`TotalCharges`) 데이터 중 일부에서 **음수(-) 값의 기록 오류(이상치)가 발견**되었습니다. 현업 데이터에서 발생할 수 있는 이러한 노이즈를 방치한 채 모델을 학습시키면 예측 성능이 왜곡됩니다. 이에 따라 체계적인 데이터 정제(Data Cleaning)와 신뢰할 수 있는 데이터 파이프라인 구축이 필수적입니다.
-* **다중공선성 및 복잡한 변수 관계의 극복**
-  * 가입 기간(`Tenure`), 월 요금(`MonthlyCharges`), 총 청구 금액(`TotalCharges`)은 서로 매우 강한 선형 상관관계(다중공선성)를 가집니다. 일반적인 통계 모델로는 분석이 어려운 복잡한 관계를 효과적으로 다루기 위해, 다중공선성에 강건하면서도 대용량 데이터 처리 속도가 압도적인 머신러닝 알고리즘(LightGBM, XGBoost 등)을 도입한 고성능 모델 개발이 필요합니다.
-* **타겟 마케팅으로의 패러다임 전환**
-  * 모든 고객에게 무차별적으로 혜택이나 프로모션을 제공하는 비용 낭비형 마케팅에서 탈피해야 합니다. 이탈 확률이 높은 고위험군 고객 리스트와 이탈에 영향을 미친 주요 요인(Feature Importance)을 정밀 타격하여, 한정된 마케팅 예산 안에서 방어 효율을 극대화(ROI 최적화)해야 합니다.
-
----
-
-## 3. 핵심 분석 및 기대효과
-
-### 핵심 분석 내용
-* **대용량 데이터셋 기반의 다차원 EDA:** 100,000명의 대규모 익명 고객 데이터를 바탕으로 나이 분포, 계약 형태(Contract), 결제 수단(PaymentMethod)과 이탈률 간의 비즈니스적 인과관계를 입증했습니다.
-* **LightGBM 기반 고속 파이프라인 구축:** 트리 기반 앙상블 알고리즘을 활용하여, 데이터 스케일링 단계를 최소화하면서도 정확도와 변별력(ROC-AUC 지표 등) 측면에서 모두 최적의 성능을 내는 파라미터를 자동 튜닝(Hyperparameter Tuning)했습니다.
-* **이탈 영향 인자 도출:** 단순 예측에 그치지 않고, 고객이 이탈 결정을 내리게 만드는 핵심 변수가 무엇인지 분석하여 비즈니스 부서가 즉각적인 액션 플랜(예: 계약 형태 변경 유도 프로모션 등)을 세울 수 있도록 지원합니다.
-
-### 기대 효과
-* **마케팅 비용 절감 (ROI 최적화):** 이탈 확률 상위 5~10%의 고위험군 고객만을 정밀 선별하여 개인화 혜택(쿠폰, 요금제 업그레이드 등)을 집중 제공함으로써 무분별한 마케팅 리소스 낭비를 막습니다.
-* **LTV (고객 생애 가치) 증대:** 이탈률을 단 1~2%만 낮추더라도 장기 약정 고객을 확보하는 효과를 낳으며, 이는 매월 고정적인 반복 매출(ARR)의 안정적인 상승으로 직결됩니다.
-* **이탈 방어 프로세스 자동화:** 개발된 머신러닝 모델을 주기적인 배치(Batch) 형태로 연동하여, 매월 혹은 매주 이탈 위험도가 높아진 고객 리스트를 고객 센터(CRM)나 마케팅 시스템에 자동으로 전달하는 자동화 인프라를 확립할 수 있습니다.
----
-
-## 4. 데이터셋 개요
+## 1. 데이터셋 개요
 
 - **가상 통신사 Telco**의 고객 이탈(churn) 자료
 - 모든 데이터는 Python(pandas + numpy)로 시드 고정 후 생성한 **가공 데이터**
@@ -132,7 +16,7 @@ SKN31-2nd-2Team
 
 ※ 통신사 고객 이탈 가공 데이터의 시초는 IBM Cognos Analytics용 샘플 데이터로 제공된 Telco Customer Churn이다. 이후 Kaggle에서 비슷한 유형의 데이터셋을 찾아볼 수 있으며 synthetic_customer_churn_100k도 그중 하나다.
 
-### 4-1. 변수에 대한 설명
+### 1.1 변수에 대한 설명
 
 | 컬럼명 | 설명 | 데이터 타입 | 예시 |
 |---|---|---|---|
@@ -147,7 +31,7 @@ SKN31-2nd-2Team
 | Churn | 이탈 여부 (타깃 변수) | string | Yes / No |  
 <br>
 
-## 5. 수치형 변수와 기초 통계량
+# 2. 수치형 변수와 기초 통계량
 
 | 변수명 | 평균값 (Mean) | 중위값 (50%) | 최솟값 (Min) | 최댓값 (Max) | 주요 특징 분석 |
 | :--- | :---: | :---: | :---: | :---: | :--- |
@@ -156,15 +40,15 @@ SKN31-2nd-2Team
 | **MonthlyCharges** (월요금) | 79.9달러 | 80.0달러 | 10.0달러 | 150.0달러 | 최소 10달러~최대 150달러 사이에서 월요금 청구 |
 | **TotalCharges** (총요금) | 2,926.1달러 | 2,268.0달러 | **-118.43달러** | 10,831.5달러 | **[오류 발견]** **총요금이 음수인 데이터(최소값: -118.43)** 가 존재 |
 
-## 5.1 수치형 변수의 도수분포표
+## 2.1 수치형 변수의 도수분포표
 ![alt text](eda_plots/02_numerical_distributions.png)
 
-## 5.2 수치형 변수의 Target 특성별 분포
+## 2.2 수치형 변수의 Target 특성별 분포
 ![alt text](eda_plots/02-1_numerical_distributions.png)
 - 가입기간이 짧을수록 이탈률이 높음
 - 월요금이 많을수록 이탈률이 높음
 
-# 6. 범주형 변수와 기초 통계량
+# 3. 범주형 변수와 기초 통계량
 
 | 변수 | 범주 | 빈도 | 비율 | 주요 특징 분석 |
 |------|------|-----:|-----:|------|
@@ -179,14 +63,14 @@ SKN31-2nd-2Team
 | | Credit card | 20,032 | 20.03% | |
 | | Bank transfer | 19,855 | 19.86% | |
 
-## 6.1 범주형 변수의 도수분포표
+## 3.1 범주형 변수의 도수분포표
 ![alt text](eda_plots/03_categorical_distributions.png)
 
-## 6.2 범주형 변수의 Target 특성별 비율
+## 3.2 범주형 변수의 Target 특성별 비율
 ![alt text](eda_plots/03-1_categorical_distributions.png)
 - 단기계약일수록 이탈률아 높음
 
-## 7. 타겟 변수(Churn) 분포 분석
+# 4. 타겟 변수(Churn) 분포 분석
 
 모델이 예측해야 하는 핵심 타겟 변수인 **고객 이탈 여부 (`Churn`)** 비율 분석
 ![이탈 분포](eda_plots/01_churn_distribution.png)
@@ -206,7 +90,7 @@ SKN31-2nd-2Team
 
 <br>
 
-## 8. 변수 간 상관관계 분석 (Correlation Matrix)
+# 5. 변수 간 상관관계 분석 (Correlation Matrix)
 
 Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 변수 상관관계 분석
 ![상관관계](eda_plots/04_correlation_matrix.png)
@@ -235,7 +119,7 @@ Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 
   - 10 이상 : 심각 (제거 또는 결합 고려)
 <br>
 
-# 9. 결측치와 이상치 분석
+# 6. 결측치와 이상치 분석
 
 - **결측치 현황** 
   - 모든 변수의 Non-Null Count가 100,000개로 일치하여 결측치 미존재
@@ -246,11 +130,12 @@ Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 
 ![alt text](eda_plots/06_numerical_boxplots.png)
 
 
-## 10. 데이터 전처리
 
-## 10.1 이상치 처리
+# 7. 데이터 전처리
 
-### 10.1.1 TotalCharges(총요금)의 음수(-)값 처리
+## 7.1 이상치 처리
+
+### 7.1.1 TotalCharges(총요금)의 음수(-)값 처리
 - 총 100,000개 중 265개(0.265%)의 음수(-)가 존재
 - 환불, 프로모션 크레딧 또는 시스템 기록 오류 가능성
 - 전처리 방법
@@ -258,7 +143,7 @@ Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 
   2. 음수(-) 행 삭제
 - 원인을 모르기 때문에 **<u>행 삭제</u>** 추천
 
-### 10.1.2 TotalCharges(총요금)의 상한 이상치 처리
+### 7.1.2 TotalCharges(총요금)의 상한 이상치 처리
 - 총 100,000개 중 이상치 기준 상한인 9540.32를 벗어난 이상치가 841개(0.841%)가 존재
 - 장기 고객의 경우 자연스러운 현상
 - 전처리 방법
@@ -266,10 +151,10 @@ Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 
   2. 음수(-) 행 삭제 후 BOX-COX 변환
 - 로그변환은 왜도현상과 이상치 제거를 하지못해 **<u>BOX-COX 변환</u>** 추천
 
-### 10.1.3 TotalCharges(총요금)의 이상치 처리 전후 비교
+### 7.1.3 TotalCharges(총요금)의 이상치 처리 전후 비교
 ![alt text](eda_plots/07_totalcharges_histogram_boxcox.png)
 ![alt text](eda_plots/08_totalcharges_boxplot_boxcox.png)
-## 10.2 Feature와 Target 분리(X, y 분리)
+## 7.2 Feature와 Target 분리(X, y 분리)
 
 - 총 컬럼(9개): CustomerID, Age, Gender, Tenure, MonthlyCharges, Contract, PaymentMethod, TotalCharges, Churn
   - CustomerID는 삭제
@@ -287,7 +172,7 @@ Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 
   | 변환 후 | 0 | 유지 | 66,856 |
   | 변환 후 | 1 | 이탈 | 33,144 |
 
-## 10.3 Train/Validation/Test set 분리
+## 7.3 Train/Validation/Test set 분리
 
 - train set(60%), validation set(20%), test set(20%)로 분리하여 데이터 준비
 
@@ -301,16 +186,16 @@ Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 
   | y_test | 20,000 |
 
 
-## 10.4 OneHotEncoding과 labelEcoding
+## 7.4 OneHotEncoding과 labelEcoding
 - 범주형(categorical) 변수에 대해서는 LabelEncoding을 함
 - 참고 사항 참조
 
 
-## 10.5 Scaling
+## 7.5 Scaling
 - 수치형(numeric) 변수에 대해서는 별도의 Scaling를 하지 않음
 - 참고 사항 참조
 
-## 10.6 참고 사항
+## 7.6 참고 사항
 
 **- 머신러닝에서의  Encoding과 Scaling 방법**
 
@@ -333,7 +218,7 @@ Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 
 \* 선형 알고리즘: Logistic Regression(Linear Regression), SVM, KNN<br>
 \* 트리형 알고리즘: Decision Tree, Random Forest, Gradient Boosing(XGBoost, LightGBM, CatBoost)
 
-## 10.7 향후 과제: 파생변수 생성을 통한 추가 분석
+## 7.7 향후 과제: 파생변수 생성을 통한 추가 분석
 
 - synthetic_customer_churn_100k 데이터 셋은  수치형(Numerical) 변수 4개(`Age`, `Tenure`, `MonthlyCharges`, `TotalCharges`)와 범주형(Categorical) 변수 3게(`Gender`, `Contract`, `PaymentMethod`) 구성된 features들로 target인 이탈를을 예측하려고 함.
 - features 수 부족이 target 예측력을 떨어뜨릴 수 있다는 가정하에 features 수 확대 방안 모색
@@ -354,7 +239,3 @@ Target['Churn`] 변수를 LabelEcoder로 수치화(Yes=1, No=0)하여 연속형 
 
   4. Tenure/(Age * 12개월)
       - 단순 가입기간보다는 생애주기에서 차지하는 가입기간 비율이 이탈률을 예축하는데 더 유의할 것이라는 가정하에 새로운 파생변수를 생성
-
-## 11. 모델 학습 결과
-
-## 12. 프로젝트 회고

@@ -162,7 +162,7 @@ SKN31-2nd-2Team
 ## 5.2 수치형 변수의 Target 특성별 분포
 ![alt text](eda_plots/02-1_numerical_distributions.png)
 - 가입기간이 짧을수록 이탈률이 높음
-- 월요금이 많을수록 이탈률이 높음
+- 월요금이 많을수록 이탈률이 
 
 # 6. 범주형 변수와 기초 통계량
 
